@@ -16,11 +16,11 @@ export default function VoteButtons() {
   }
   return (
     <View style={styles.container}>
-      <View>
+      <View >
         <Text style={styles.voteNumber}>{posiVote}</Text>
         <Text style={styles.voteNumber}>{negaVote}</Text>
       </View>
-      <View>
+      <View >
         <Pressable onPress={upvote}>
           <AntDesign
             style={styles.voteButton} 
@@ -40,17 +40,16 @@ export default function VoteButtons() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F0EDED',
     flexDirection: 'row',
   },
   voteButton: {
     padding: 4,
-    fontSize: 32,
+    fontSize: 32, 
   },
   voteNumber: {
     fontSize: 24,
     padding: 4,
-    marginLeft: 8
+    marginLeft: 4,
   },
 });
