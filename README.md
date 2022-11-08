@@ -1,1 +1,0 @@
-# Mobiilikehitysprojekti_Ry4
