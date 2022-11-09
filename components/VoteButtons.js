@@ -2,34 +2,24 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 
-export default function VoteButtons() {
-  const [posiVote, setPosiVote] = useState(0)
-  const [negaVote, setNegaVote] = useState(0)
+export default function VoteButtons(props) {
 
-
-  const upvote = () => {
-    setPosiVote(posiVote + 1)
-  }
-
-  const downvote = () => {
-    setNegaVote(negaVote - 1)
-  }
   return (
     <View style={styles.container}>
       <View >
-        <Text style={styles.voteNumber}>{posiVote}</Text>
-        <Text style={styles.voteNumber}>{negaVote}</Text>
+        <Text style={styles.voteNumber}>{props.votes.upvotes}</Text>
+        <Text style={styles.voteNumber}>{props.votes.downvotes}</Text>
       </View>
       <View >
-        <Pressable onPress={upvote}>
+        <Pressable onPress={() => { props.upvote() }}>
           <AntDesign
-            style={styles.voteButton} 
+            style={styles.voteButton}
             name="up"
           />
         </Pressable>
-        <Pressable onPress={downvote}>
+        <Pressable onPress={() => { props.downvote() }}>
           <AntDesign
-            style={styles.voteButton}  
+            style={styles.voteButton}
             name="down"
           />
         </Pressable>
