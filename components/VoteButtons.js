@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   voteButton: {
     padding: 4,
-    fontSize: 32, 
+    fontSize: 32,
   },
   voteNumber: {
     fontSize: 24,
