@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import Constants from 'expo-constants';
-
+import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
 
 
@@ -27,6 +27,7 @@ export default function Thread() {
       <Pressable style={styles.submitButton} onPress={test}>
         <Text style={styles.submitText}>Submit</Text>
       </Pressable>
+      <Comments style={styles.title}/>
     </View>
   )
 }
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     height: 100
   },
   submitButton: {
-    backgroundColor: '#F0EDED',
+    backgroundColor: 'F0EDED',
     width: 100,
     alignSelf: 'flex-end',
     marginRight: 20,

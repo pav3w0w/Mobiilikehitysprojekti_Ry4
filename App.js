@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import Comments from './components/Comments'
 import Thread from './screens/Thread'
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +17,9 @@ export default function App() {
           headerTitle: 'Thread',
         }}*/
       />
+
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 }
