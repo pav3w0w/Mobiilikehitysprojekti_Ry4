@@ -19,6 +19,7 @@ export default function Thread() {
         <VoteButtons />
         <Text style={styles.title}>This will be title This will be title This will be title This will be title</Text>
       </View>
+      <Text style={styles.OPtext}>Here is the saateteksti from the creator of the thread asd asd asda asd</Text>
       <TextInput 
         style={styles.comment}
         placeholder="Write a comment"
@@ -45,6 +46,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingLeft: 20,
     marginRight: 50,
+  },
+  OPtext: {
+    fontSize:18,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20
   },
   comment: {
     borderWidth: 1,
