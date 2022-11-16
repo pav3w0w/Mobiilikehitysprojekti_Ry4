@@ -8,6 +8,9 @@ export default function Home(props) {
       <Text>Temp button to navigate to the test thread</Text> 
       <Button title='Existing thread '/*<- space needed to render the button correctly on 1Plus- phones */ 
         onPress={() => props.navigation.navigate('Thread')}/> 
+      <Text style={styles.btnSpacer}></Text>  
+      <Button title='Create a thread '/*<- space needed to render the button correctly on 1Plus- phones */ 
+        onPress={() => props.navigation.navigate('NewThread')}/>   
     </View>
   )
 }
@@ -19,4 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnSpacer: {
+    marginTop: 10
+  }
 });
