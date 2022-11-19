@@ -5,7 +5,7 @@ import { View, Text, Button, Image } from 'react-native';
 import Thread from './screens/Thread'
 import Home from './screens/Home'
 import NewThread from './screens/NewThread';
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import ModalDropdown from 'react-native-modal-dropdown';
 const Stack = createNativeStackNavigator();
 
@@ -20,18 +20,18 @@ export default function App() {
         <Stack.Screen
           name='Home'
           component={Home}
-                      options={{
-                        headerRight: () => (
+          options={{
+            headerRight: () => (
 
-                        <ModalDropdown  options={['option 1', 'option 2']}/>
+              <ModalDropdown options={['option 1', 'option 2']} />
 
-                        ),
-                      }}
+            ),
+          }}
 
         />
         <Stack.Screen
           name='Thread'
-          component={Thread}
+          component={() => Thread("YIkO1keG7yIrFMcvWiUQ")}
         />
         <Stack.Screen
           name='NewThread'

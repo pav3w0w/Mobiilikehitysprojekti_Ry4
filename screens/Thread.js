@@ -1,34 +1,72 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native'
-import React, { useState } from 'react'
-import Constants from 'expo-constants';
+import React, { useState, useEffect } from 'react'
+import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { db } from '../dbConn'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
 
 
-export default function Thread() {
-  const [comment, setComment] = useState("")
+export default function Thread(threadId) {
+  const [comment, setNewComment] = useState("")
+  const [title, setTitle] = useState("loading..")
+  const [comments, setComments] = useState(["loading..."])
+  const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 })
+  const [isMounted, setMounted] = useState(false)
 
   const test = () => {
     console.log("Submit button pressed")
   }
 
 
+  const downvote = () => {
+    var newVotes = votes
+    newVotes.downvotes = newVotes.downvotes - 1
+    setVotes({ upvotes: newVotes.upvotes, downvotes: newVotes.downvotes })
+  }
+
+  const upvote = () => {
+    var newVotes = votes
+    newVotes.upvotes = newVotes.upvotes + 1
+    setVotes({ upvotes: newVotes.upvotes, downvotes: newVotes.downvotes })
+  }
+
+  const getDetails = async (threadId) => {
+    const fireStore = getFirestore(db)
+    const threadRef = doc(fireStore, 'langat', threadId)
+    const details = await getDoc(threadRef)
+    if (details.exists()) {
+      data = details.data()
+      setTitle(data.title)
+      setVotes({ upvotes: data.upvotes, downvotes: data.downvotes })
+    }
+    else {
+      console.log("Error fetching thread with id: " + threadId)
+    }
+  }
+
+  useEffect(() => {
+    if (!isMounted) {
+      getDetails(threadId)
+      setMounted(true)
+    }
+  })
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <VoteButtons />
-        <Text style={styles.title}>This will be title This will be title This will be title This will be title</Text>
+        <VoteButtons votes={votes} upvote={() => { upvote() }} downvote={() => { downvote() }} />
+        <Text style={styles.title}>{title}</Text>
       </View>
       <Text style={styles.OPtext}>Here is the saateteksti from the creator of the thread asd asd asda asd</Text>
-      <TextInput 
+      <TextInput
         style={styles.comment}
         placeholder="Write a comment"
-        onChangeText={text => setComment(text)}
+        onChangeText={text => setNewComment(text)}
       />
       <Pressable style={styles.submitButton} onPress={test}>
         <Text style={styles.submitText}>Submit</Text>
       </Pressable>
-      <Comments/>
+      <Comments />
     </View>
   )
 }
@@ -48,7 +86,7 @@ const styles = StyleSheet.create({
     marginRight: 50,
   },
   OPtext: {
-    fontSize:18,
+    fontSize: 18,
     marginTop: 20,
     marginLeft: 20,
     marginRight: 20
@@ -71,5 +109,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 8,
     textAlign: 'center',
-  }, 
+  },
 });
