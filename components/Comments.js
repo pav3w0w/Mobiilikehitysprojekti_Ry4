@@ -3,18 +3,18 @@ import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import VoteButtons from '../components/VoteButtons';
 export default function Comments() {
-return(
-<View style={styles.container}>
-<View style={styles.titleContainer}>
-<Text style={styles.comment}>helasdadslo</Text>
-<VoteButtons />
-</View>
-</View>
-)
+  return (
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.comment}>helasdadslo</Text>
+        <VoteButtons votes={{ upvotes: 0, downvotes: 0 }} upvote={() => { console.log("upvote") }} downvotes={() => { console.log("dwnvote") }} />
+      </View>
+    </View>
+  )
 
 }
 const styles = StyleSheet.create({
-container: {
+  container: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 4,
@@ -25,7 +25,7 @@ container: {
   },
   titleContainer: {
     flexDirection: 'row',
-    marginTop:8
+    marginTop: 8
 
   },
   title: {
