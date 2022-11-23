@@ -23,7 +23,9 @@ function Feed({ navigation }) {
       <Text>Feed Screen</Text>
       <Button
         title="Thread"
-        onPress={() => navigation.navigate('Thread')}
+        onPress={() => navigation.navigate('Thread', {
+          threadId: 'YIkO1keG7yIrFMcvWiUQ'
+        })}
       />
       <Button
         title="NewThread"
@@ -60,7 +62,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Thread" component={Thread} />
+      <Drawer.Screen name="Thread" component={() => Thread("YIkO1keG7yIrFMcvWiUQ")} />
       <Drawer.Screen name="NewThread" component={NewThread} />
     </Drawer.Navigator>
   );
@@ -71,7 +73,7 @@ export default function App() {
   return (
 
     <NavigationContainer>
-        <MyDrawer />
+      <MyDrawer />
     </NavigationContainer>
 
 
