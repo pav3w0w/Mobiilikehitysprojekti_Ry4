@@ -58,10 +58,7 @@ const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
   return (
-    <Drawer.Navigator
-      useLegacyImplementation
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-    >
+    <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Thread" component={Thread} />
       <Drawer.Screen name="NewThread" component={NewThread} />
