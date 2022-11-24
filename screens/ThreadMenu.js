@@ -4,14 +4,19 @@ import ThreadPreview from '../components/ThreadPreview'
 import { doc, collection, getDocs, getFirestore } from "firebase/firestore"
 import { db } from '../dbConn'
 
-export default function ThreadMenu(navigation) {
-    const [threads, setThreads] = useState("loading")
+export default function ThreadMenu({ navigation }) {
+    const [threads, setThreads] = useState([])
     const [isMounted, setMounted] = useState(false)
 
     const getThreads = async () => {
         const fireStore = getFirestore(db)
         const threadsCollection = collection(fireStore, 'langat')
-        setThreads(await getDocs(threadsCollection))
+        var docArr = []
+        var docs = await getDocs(threadsCollection)
+        docs.forEach((document) => {
+            docArr.push(document)
+        })
+        setThreads(docArr)
     }
 
     useEffect(() => {
@@ -24,8 +29,10 @@ export default function ThreadMenu(navigation) {
     return (
         < ScrollView >
             <View>
-                {threads.forEach(doc => {
-                    ThreadPreview(doc.data(), navigation)
+                {threads.map(doc => {
+                    paramObj = doc.data()
+                    paramObj["threadId"] = doc.id
+                    return ThreadPreview(paramObj, navigation)
                 })}
             </View>
         </ScrollView >
