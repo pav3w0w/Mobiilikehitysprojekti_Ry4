@@ -6,9 +6,10 @@ import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
 
 
-export default function Thread(threadId) {
+export default function Thread({ navigation, route }) {
   const [comment, setNewComment] = useState("")
   const [title, setTitle] = useState("loading..")
+  const [content, setContent] = useState("")
   const [comments, setComments] = useState(["loading..."])
   const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 })
   const [isMounted, setMounted] = useState(false)
@@ -38,6 +39,7 @@ export default function Thread(threadId) {
       data = details.data()
       setTitle(data.title)
       setVotes({ upvotes: data.upvotes, downvotes: data.downvotes })
+      setContent(data.content)
     }
     else {
       console.log("Error fetching thread with id: " + threadId)
@@ -46,7 +48,7 @@ export default function Thread(threadId) {
 
   useEffect(() => {
     if (!isMounted) {
-      getDetails(threadId)
+      getDetails(route.params.threadId)
       setMounted(true)
     }
   })
@@ -57,7 +59,7 @@ export default function Thread(threadId) {
         <VoteButtons votes={votes} upvote={() => { upvote() }} downvote={() => { downvote() }} />
         <Text style={styles.title}>{title}</Text>
       </View>
-      <Text style={styles.OPtext}>Here is the saateteksti from the creator of the thread asd asd asda asd</Text>
+      <Text style={styles.OPtext}>{content}</Text>
       <TextInput
         style={styles.comment}
         placeholder="Write a comment"

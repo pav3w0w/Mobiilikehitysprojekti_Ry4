@@ -6,16 +6,31 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import Comments from './components/Comments'
-import { View, Text, Button, Image } from 'react-native';
-import Thread from './screens/Thread'
+import { View, Text, } from 'react-native';
+import ThreadMenu from './screens/ThreadMenu'
 import Home from './screens/Home'
 import NewThread from './screens/NewThread';
+import Thread from './screens/Thread';
 import React, { useRef } from 'react';
-import ModalDropdown from 'react-native-modal-dropdown';
+
 const Stack = createNativeStackNavigator();
 
-
+function GlobalStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Drawer"
+        component={MyDrawer}
+        headerShown={false}
+        options={{ headerMode: 'none', headerShown: false }}
+      />
+      <Stack.Screen
+        name="Thread"
+        component={Thread}
+      />
+    </Stack.Navigator>
+  )
+}
 
 function Feed({ navigation }) {
   return (
@@ -62,7 +77,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Thread" component={() => Thread("YIkO1keG7yIrFMcvWiUQ")} />
+      <Drawer.Screen name="ThreadMenu" component={ThreadMenu} />
       <Drawer.Screen name="NewThread" component={NewThread} />
     </Drawer.Navigator>
   );
@@ -73,7 +88,7 @@ export default function App() {
   return (
 
     <NavigationContainer>
-      <MyDrawer />
+      <GlobalStack />
     </NavigationContainer>
 
 
