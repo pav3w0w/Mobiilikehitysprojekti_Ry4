@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { doc, getDoc, getFirestore } from "firebase/firestore"
 import { db } from '../dbConn'
@@ -8,14 +8,21 @@ import VoteButtons from '../components/VoteButtons';
 
 export default function Thread({ navigation, route }) {
   const [comment, setNewComment] = useState("")
+  const [commentlist, addComment] = useState([])
   const [title, setTitle] = useState("loading..")
   const [content, setContent] = useState("")
   const [comments, setComments] = useState(["loading..."])
   const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 })
   const [isMounted, setMounted] = useState(false)
 
-  const test = () => {
+  const submitNewComment = () => {
     console.log("Submit button pressed")
+    if (comment != ""){
+    commentlist.push(comment)
+    addComment([...commentlist])
+    setNewComment("")
+    }
+
   }
 
 
@@ -64,11 +71,16 @@ export default function Thread({ navigation, route }) {
         style={styles.comment}
         placeholder="Write a comment"
         onChangeText={text => setNewComment(text)}
+        value= {comment}
       />
-      <Pressable style={styles.submitButton} onPress={test}>
+      <Pressable style={styles.submitButton} onPress={submitNewComment}>
         <Text style={styles.submitText}>Submit</Text>
       </Pressable>
-      <Comments />
+      <ScrollView>
+    {commentlist.map(com => {
+      return <Comments comment={com}/>
+    })}
+    </ScrollView>
     </View>
   )
 }
