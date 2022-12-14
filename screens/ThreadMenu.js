@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import ThreadPreview from '../components/ThreadPreview'
-import { doc, collection, getDocs, getFirestore } from "firebase/firestore"
+import { collection, getDocs, getFirestore } from "firebase/firestore"
 import { db } from '../dbConn'
 
-export default function ThreadMenu({ navigation }) {
+export default function ThreadMenu({ route, navigation }) {
     const [threads, setThreads] = useState([])
     const [isMounted, setMounted] = useState(false)
 

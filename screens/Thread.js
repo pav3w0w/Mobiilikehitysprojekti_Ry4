@@ -6,7 +6,7 @@ import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
 
 
-export default function Thread({ navigation, route }) {
+export default function Thread({ route, navigation }) {
   const [comment, setNewComment] = useState("")
   const [commentlist, addComment] = useState([])
   const [title, setTitle] = useState("loading..")
@@ -17,10 +17,10 @@ export default function Thread({ navigation, route }) {
 
   const submitNewComment = () => {
     console.log("Submit button pressed")
-    if (comment != ""){
-    commentlist.push(comment)
-    addComment([...commentlist])
-    setNewComment("")
+    if (comment != "") {
+      commentlist.push(comment)
+      addComment([...commentlist])
+      setNewComment("")
     }
 
   }
@@ -71,16 +71,16 @@ export default function Thread({ navigation, route }) {
         style={styles.comment}
         placeholder="Write a comment"
         onChangeText={text => setNewComment(text)}
-        value= {comment}
+        value={comment}
       />
       <Pressable style={styles.submitButton} onPress={submitNewComment}>
         <Text style={styles.submitText}>Submit</Text>
       </Pressable>
       <ScrollView>
-    {commentlist.map(com => {
-      return <Comments comment={com}/>
-    })}
-    </ScrollView>
+        {commentlist.map(com => {
+          return <Comments comment={com} />
+        })}
+      </ScrollView>
     </View>
   )
 }

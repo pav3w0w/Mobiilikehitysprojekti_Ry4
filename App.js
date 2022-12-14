@@ -11,6 +11,7 @@ import ThreadMenu from './screens/ThreadMenu'
 import Home from './screens/Home'
 import NewThread from './screens/NewThread';
 import Thread from './screens/Thread';
+import LoginScreen from './screens/Login';
 import React, { useRef } from 'react';
 
 const Stack = createNativeStackNavigator();
@@ -30,24 +31,6 @@ function GlobalStack() {
       />
     </Stack.Navigator>
   )
-}
-
-function Feed({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Feed Screen</Text>
-      <Button
-        title="Thread"
-        onPress={() => navigation.navigate('Thread', {
-          threadId: 'YIkO1keG7yIrFMcvWiUQ'
-        })}
-      />
-      <Button
-        title="NewThread"
-        onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-      />
-    </View>
-  );
 }
 
 function Notifications() {
@@ -76,6 +59,7 @@ const Drawer = createDrawerNavigator();
 function MyDrawer() {
   return (
     <Drawer.Navigator>
+      <Drawer.Screen name="Login" component={LoginScreen} />
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="ThreadMenu" component={ThreadMenu} />
       <Drawer.Screen name="NewThread" component={NewThread} />
