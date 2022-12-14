@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
 
-export default function NewThread() {
+export default function NewThread({ route, navigation }) {
   const [title, setTitle] = useState("")
   const [threadText, setThreadText] = useState("")
 
@@ -16,7 +16,7 @@ export default function NewThread() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Thread title</Text>
-      <TextInput 
+      <TextInput
         style={styles.titleinput}
         placeholder='Enter your title here'
         onChangeText={text => setTitle(text)}
@@ -66,5 +66,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 8,
     textAlign: 'center',
-  }, 
+  },
 })
