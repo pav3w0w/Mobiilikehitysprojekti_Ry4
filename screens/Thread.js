@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { doc, getDoc, getFirestore } from "firebase/firestore"
+import { doc, getDoc, getFirestore, updateDoc } from "firebase/firestore"
 import { db } from '../dbConn'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
@@ -30,12 +30,14 @@ export default function Thread({ route, navigation }) {
     var newVotes = votes
     newVotes.downvotes = newVotes.downvotes - 1
     setVotes({ upvotes: newVotes.upvotes, downvotes: newVotes.downvotes })
+    updateVotes(route.params.threadId, newVotes)
   }
 
   const upvote = () => {
     var newVotes = votes
     newVotes.upvotes = newVotes.upvotes + 1
     setVotes({ upvotes: newVotes.upvotes, downvotes: newVotes.downvotes })
+    updateVotes(route.params.threadId, newVotes)
   }
 
   const getDetails = async (threadId) => {
@@ -59,6 +61,18 @@ export default function Thread({ route, navigation }) {
       setMounted(true)
     }
   })
+
+  const updateVotes = async (ThreadId, newVotes) => {
+    const fireStore = getFirestore(db)
+    await updateDoc(doc(fireStore, "langat", ThreadId), {
+      upvotes: newVotes.upvotes, 
+      downvotes: newVotes.downvotes
+    }).then(() => {
+      console.log("data updated")
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
 
   return (
     <View style={styles.container}>
