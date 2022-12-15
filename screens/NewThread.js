@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
-
+import { getLogin } from '../helpers/getLoginInfo'
 import { db } from '../dbConn'
 import { getFirestore, addDoc, collection } from "firebase/firestore"
 import { RootSiblingParent } from 'react-native-root-siblings';
@@ -11,13 +11,14 @@ export default function NewThread({ route, navigation }) {
   const [threadText, setThreadText] = useState("")
 
 
-  const Post = async() => {
-    if(title.length < 4) {
+  const Post = async () => {
+    if (title.length < 4) {
       console.log("title must be atleast 4 characters long")
       Toast.show('Title must be atleast 4 characters long.', {
         duration: Toast.durations.LONG,
-    })
-    } else{
+      })
+    } else {
+      const userData = await getLogin()
       const fireStore = getFirestore(db)
       const docRef = await addDoc(collection(fireStore, 'langat'), {
         title: title,
@@ -25,8 +26,8 @@ export default function NewThread({ route, navigation }) {
         downvotes: 0,
         upvotes: 0,
         comments: [],
-        ownerUser: route.params.params.params.userData.localId
-      }).catch (error => console.log(error))
+        ownerUser: userData.id
+      }).catch(error => console.log(error))
       setTitle('')
       setThreadText('')
       console.log('Post saved.')
