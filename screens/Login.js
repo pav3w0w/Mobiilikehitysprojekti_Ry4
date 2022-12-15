@@ -22,6 +22,7 @@ export default function LoginScreen({ route, navigation }) {
         <View style={styles.container}>
             <Text>Email:</Text>
             <TextInput
+                keyboardType='email-address'
                 placeholder='Email'
                 onChangeText={text => setEmail(text)}
             />

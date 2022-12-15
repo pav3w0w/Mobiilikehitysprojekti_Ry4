@@ -1,36 +1,65 @@
 import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native'
 import React, { useState } from 'react'
 
+import { db } from '../dbConn'
+import { getFirestore, addDoc, collection } from "firebase/firestore"
+import { RootSiblingParent } from 'react-native-root-siblings';
+import Toast from 'react-native-root-toast'
+
 export default function NewThread({ route, navigation }) {
   const [title, setTitle] = useState("")
   const [threadText, setThreadText] = useState("")
 
 
-  const Post = () => {
-    console.log("Post button pressed")
-    console.log("title: " + title + " text: " + threadText)
+  const Post = async() => {
+    if(title.length < 4) {
+      console.log("title must be atleast 4 characters long")
+      Toast.show('Title must be atleast 4 characters long.', {
+        duration: Toast.durations.LONG,
+    })
+    } else{
+      const fireStore = getFirestore(db)
+      const docRef = await addDoc(collection(fireStore, 'langat'), {
+        title: title,
+        content: threadText,
+        downvotes: 0,
+        upvotes: 0,
+        comments: [],
+        ownerUser: route.params.params.params.userData.localId
+      }).catch (error => console.log(error))
+      setTitle('')
+      setThreadText('')
+      console.log('Post saved.')
+      Toast.show('Successfully posted.', {
+        duration: Toast.durations.LONG,
+      })
+    }
   }
 
 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Thread title</Text>
-      <TextInput
-        style={styles.titleinput}
-        placeholder='Enter your title here'
-        onChangeText={text => setTitle(text)}
-      />
-      <Text style={styles.title}>Text</Text>
-      <TextInput
-        multiline={true}
-        style={styles.tinput}
-        placeholder='Enter your text here'
-        onChangeText={text => setThreadText(text)}
-      />
-      <Pressable style={styles.postButton} onPress={Post}>
-        <Text style={styles.postText}>Post</Text>
-      </Pressable>
+      <RootSiblingParent>
+        <Text style={styles.title}>Thread title</Text>
+        <TextInput
+          value={title}
+          style={styles.titleinput}
+          placeholder='Enter your title here'
+          onChangeText={text => setTitle(text)}
+        />
+        <Text style={styles.title}>Text</Text>
+        <TextInput
+          value={threadText}
+          multiline={true}
+          style={styles.tinput}
+          placeholder='Enter your text here'
+          onChangeText={text => setThreadText(text)}
+        />
+        <Pressable style={styles.postButton} onPress={Post}>
+          <Text style={styles.postText}>Post</Text>
+        </Pressable>
+      </RootSiblingParent>
     </View>
   )
 }
