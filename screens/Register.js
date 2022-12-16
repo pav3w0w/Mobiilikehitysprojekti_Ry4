@@ -16,14 +16,17 @@ export default function RegisterScreen({ route, navigation }) {
             createUserWithEmailAndPassword(auth, email, password)
                 .then((response) => {
                     saveLogin(response._tokenResponse.idToken, response._tokenResponse.localId)
-                }).then(navigation.navigate('Home')).catch((error) => {
-                    if (error.message == "Error (auth/email-already-in-use).") {
-                        Toast.show("Email allready in use.", {
+                    navigation.navigate('Home')
+                }).catch((error) => {
+                    console.log(error.name)
+                    console.log(error.message)
+                    if (error.name == "FirebaseError") {
+                        Toast.show(error.message, {
                             duration: Toast.durations.LONG,
                         })
+                    } else {
+                        throw error
                     }
-                }).then(() => {
-                    setEmail("")
                 })
         else {
             console.log("Passwords did not match")

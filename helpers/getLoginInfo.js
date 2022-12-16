@@ -8,3 +8,8 @@ export async function saveLogin(jwt, userid) {
     await SecureStore.setItemAsync("jwt", jwt)
     await SecureStore.setItemAsync("userId", userid)
 }
+
+export async function removeLogin() {
+    await SecureStore.deleteItemAsync("jwt")
+    await SecureStore.deleteItemAsync("userId")
+}
