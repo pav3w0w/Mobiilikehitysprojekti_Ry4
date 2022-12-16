@@ -12,6 +12,7 @@ import Home from './screens/Home'
 import NewThread from './screens/NewThread';
 import Thread from './screens/Thread';
 import LoginScreen from './screens/Login';
+import RegisterScreen from './screens/Register';
 import React, { useRef } from 'react';
 
 const Stack = createNativeStackNavigator();
@@ -60,6 +61,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Login" component={LoginScreen} />
+      <Drawer.Screen name="Register" component={RegisterScreen} />
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="ThreadMenu" component={ThreadMenu} />
       <Drawer.Screen name="NewThread" component={NewThread} />

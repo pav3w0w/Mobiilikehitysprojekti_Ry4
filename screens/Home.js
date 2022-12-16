@@ -1,11 +1,12 @@
 import { View, Text, Button, StyleSheet } from 'react-native'
 import React from 'react'
+import { getLogin } from '../helpers/getLoginInfo'
 
 
 export default function Home({ route, navigation }) {
-  
+
   const params = route.params
-  
+
   return (
     <View style={styles.container}>
       <Text>Browse threads created by users here</Text>
@@ -13,10 +14,10 @@ export default function Home({ route, navigation }) {
         onPress={() => navigation.navigate('ThreadMenu')} />
       <Text style={styles.btnSpacer}>Create a new thread here</Text>
       <Button title='Create a thread '/*<- space needed to render the button correctly on 1Plus- phones */
-        onPress={() => navigation.navigate('NewThread', {params})} />
+        onPress={() => navigation.navigate('NewThread', { params })} />
       <Text style={styles.btnSpacer}>Test your login</Text>
       <Button title='Test login'/*<- space needed to render the button correctly on 1Plus- phones */
-        onPress={() => console.log(route.params)} />
+        onPress={async () => console.log(await getLogin())} />
     </View>
   )
 }

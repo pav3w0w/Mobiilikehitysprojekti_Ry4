@@ -1,18 +1,24 @@
 import { View, Text, Button, TextInput, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-
+import { saveLogin, removeLogin } from '../helpers/getLoginInfo'
 
 export default function LoginScreen({ route, navigation }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const auth = getAuth();
 
+    const tryLogout = async () => {
+        getAuth().signOut()
+        await removeLogin()
+    }
+
     const tryLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
-                navigation.navigate('Home', { ...route, "params": { "userData": userCredentials._tokenResponse } })
-            })
+                console.log(userCredentials._tokenResponse)
+                saveLogin(userCredentials._tokenResponse.idToken, userCredentials._tokenResponse.localId)
+            }).then(navigation.navigate('Home'))
             .catch((error) => {
                 console.error(error);
             })
@@ -33,6 +39,10 @@ export default function LoginScreen({ route, navigation }) {
                 secureTextEntry={true}
             />
             <Button onPress={() => tryLogin()} title="Login"></Button>
+            <Text>Or register here</Text>
+            <Button onPress={() => navigation.navigate('Register')} title="register" />
+            <Text>You can log out here</Text>
+            <Button onPress={async () => await tryLogout()} title="logout" />
         </View>
     )
 }
