@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { doc, getDoc, getFirestore, updateDoc } from "firebase/firestore"
+import { getLogin } from '../helpers/getLoginInfo'
+import { doc, getDoc, getFirestore, updateDoc, arrayUnion, addDoc, collection } from "firebase/firestore"
 import { db } from '../dbConn'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
@@ -16,13 +17,40 @@ export default function Thread({ route, navigation }) {
   const [isMounted, setMounted] = useState(false)
 
   const submitNewComment = () => {
-    console.log("Submit button pressed")
     if (comment != "") {
-      commentlist.push(comment)
-      addComment([...commentlist])
-      setNewComment("")
+      commentToFirebase()
+    }else {
+      console.log("empty string")
     }
+  }
 
+  const commentToFirebase = async() => {
+    const userData = await getLogin()
+    const fireStore = getFirestore(db)
+    const docRef = await addDoc(collection(fireStore, "comments"), {
+      comments : [],
+      content : comment,
+      downvotes : 0,
+      upvotes : 0,
+      ownerUser : userData.id
+    }).catch(error => console.log(error)) 
+      console.log("data updated")
+      comments.push(comment)
+      setComments([...comments])
+      setNewComment("")
+      updateCommentArray(route.params.threadId, docRef.id)
+  }
+  
+  
+  const updateCommentArray = async(threadId, commentId) => {
+    const fireStore = getFirestore(db)
+    await updateDoc(doc(fireStore, "langat", threadId), {
+      comments: arrayUnion(commentId)
+    }).then(() => {
+      console.log("data updated")
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
 
@@ -53,6 +81,16 @@ export default function Thread({ route, navigation }) {
     else {
       console.log("Error fetching thread with id: " + threadId)
     }
+    for (let index = 0; index < details.data().comments.length; index++) {
+      const commentRef = doc(fireStore, "comments", details.data().comments[index]);
+      const docSnap = await getDoc(commentRef);
+      if (docSnap.exists()) {
+        commentlist.push(docSnap.data().content)
+        } else {
+          console.log("No such document!");
+        }
+    }
+    setComments(commentlist)
   }
 
   useEffect(() => {
@@ -62,9 +100,9 @@ export default function Thread({ route, navigation }) {
     }
   })
 
-  const updateVotes = async (ThreadId, newVotes) => {
+  const updateVotes = async (threadId, newVotes) => {
     const fireStore = getFirestore(db)
-    await updateDoc(doc(fireStore, "langat", ThreadId), {
+    await updateDoc(doc(fireStore, "langat", threadId), {
       upvotes: newVotes.upvotes, 
       downvotes: newVotes.downvotes
     }).then(() => {
@@ -91,7 +129,7 @@ export default function Thread({ route, navigation }) {
         <Text style={styles.submitText}>Submit</Text>
       </Pressable>
       <ScrollView>
-        {commentlist.map(com => {
+        {comments.map(com => {
           return <Comments comment={com} />
         })}
       </ScrollView>
