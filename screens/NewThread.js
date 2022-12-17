@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   postButton: {
-    backgroundColor: '#F0EDED',
+    backgroundColor: '#2196F3',
     width: 100,
     alignSelf: 'flex-end',
     marginTop: 20,
@@ -96,5 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 8,
     textAlign: 'center',
+    color: '#fff'
   },
 })

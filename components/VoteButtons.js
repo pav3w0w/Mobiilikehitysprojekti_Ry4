@@ -30,7 +30,7 @@ export default function VoteButtons(props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F0EDED',
+    backgroundColor: '#fff',
     flexDirection: 'row',
   },
   voteButton: {

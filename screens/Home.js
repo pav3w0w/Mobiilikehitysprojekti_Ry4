@@ -9,7 +9,8 @@ export default function Home({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Browse threads created by users here</Text>
+    <View>
+      <Text style={styles.btnSpacer}>Browse threads created by users here</Text>
       <Button title='Browse Threads '/*<- space needed to render the button correctly on 1Plus- phones */
         onPress={() => navigation.navigate('ThreadMenu')} />
       <Text style={styles.btnSpacer}>Create a new thread here</Text>
@@ -19,6 +20,7 @@ export default function Home({ route, navigation }) {
       <Button title='Test login'/*<- space needed to render the button correctly on 1Plus- phones */
         onPress={async () => console.log(await getLogin())} />
     </View>
+       </View>
   )
 }
 
@@ -28,8 +30,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+
   },
   btnSpacer: {
-    marginTop: 10
+    margin: 15,
+    textAlign: 'center',
   }
 });

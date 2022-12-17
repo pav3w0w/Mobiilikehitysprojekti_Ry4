@@ -162,14 +162,17 @@ const styles = StyleSheet.create({
     height: 100
   },
   submitButton: {
-    backgroundColor: '#F0EDED',
+    backgroundColor: '#2196F3',
     width: 100,
     alignSelf: 'flex-end',
     marginRight: 20,
+    borderRadius: 4
+
   },
   submitText: {
     fontSize: 18,
     padding: 8,
     textAlign: 'center',
+    color: '#fff'
   },
 });

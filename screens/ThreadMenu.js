@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, StyleSheet } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import ThreadPreview from '../components/ThreadPreview'
 import { collection, getDocs, getFirestore } from "firebase/firestore"
@@ -27,7 +27,7 @@ export default function ThreadMenu({ route, navigation }) {
     })
 
     return (
-        < ScrollView >
+        < ScrollView style={styles.titleContainer}>
             <View>
                 {threads.map(doc => {
                     paramObj = doc.data()
@@ -38,3 +38,8 @@ export default function ThreadMenu({ route, navigation }) {
         </ScrollView >
     )
 }
+const styles = StyleSheet.create({
+    titleContainer: {
+        backgroundColor: '#fff'
+        }
+    });
