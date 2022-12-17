@@ -13,7 +13,11 @@ export default function ThreadPreview(props, navProp) {
     }
 
     return (
-        <View style={styles.ThreadPreview} onStartShouldSetResponder={() => navProp.navigate('Thread', { screen: 'Thread', threadId: props.threadId })}>
+        <View
+            style={styles.ThreadPreview}
+            onTouchEnd={() => navProp.navigate('Thread', { screen: 'Thread', threadId: props.threadId })}
+            key={props.threadId}
+        >
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{props.title}</Text>
             </View>
