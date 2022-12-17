@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { getLogin } from '../helpers/getLoginInfo'
-import { doc, getDoc, getFirestore, updateDoc, arrayUnion, addDoc, collection, query, where, getDocs } from "firebase/firestore"
+import { doc, getDoc, getFirestore, updateDoc, arrayUnion, addDoc, collection } from "firebase/firestore"
 import { db } from '../dbConn'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
@@ -38,14 +38,14 @@ export default function Thread({ route, navigation }) {
       comments.push(comment)
       setComments([...comments])
       setNewComment("")
-      updateCommentArray(route.params.threadId, docRef)
+      updateCommentArray(route.params.threadId, docRef.id)
   }
   
   
-  const updateCommentArray = async(threadId, docRef) => {
+  const updateCommentArray = async(threadId, commentId) => {
     const fireStore = getFirestore(db)
     await updateDoc(doc(fireStore, "langat", threadId), {
-      comments: arrayUnion(docRef)
+      comments: arrayUnion(commentId)
     }).then(() => {
       console.log("data updated")
     }).catch((error) => {
@@ -81,6 +81,16 @@ export default function Thread({ route, navigation }) {
     else {
       console.log("Error fetching thread with id: " + threadId)
     }
+    for (let index = 0; index < details.data().comments.length; index++) {
+      const commentRef = doc(fireStore, "comments", details.data().comments[index]);
+      const docSnap = await getDoc(commentRef);
+      if (docSnap.exists()) {
+        commentlist.push(docSnap.data().content)
+        } else {
+          console.log("No such document!");
+        }
+    }
+    setComments(commentlist)
   }
 
   useEffect(() => {
