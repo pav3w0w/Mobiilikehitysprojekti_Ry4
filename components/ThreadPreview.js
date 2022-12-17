@@ -28,12 +28,18 @@ export default function ThreadPreview(props, navProp) {
 
 const styles = StyleSheet.create({
     ThreadPreview: {
+        margin: 6,
         paddingTop: 20,
-        paddingBottom: 20
+        borderBottomWidth: 3,
+        paddingBottom: 20,
+        borderColor: '#2196F3',
+        backgroundColor: '#fff'
     },
     titleContainer:
     {
         flexDirection: 'row',
+        borderWidth: 0,
+            borderColor: '#0A0A0A',
     },
     title: {
         fontSize: 24,
@@ -41,6 +47,7 @@ const styles = StyleSheet.create({
         marginRight: 50,
     },
     OPtext: {
+
         fontSize: 18,
         marginTop: 10,
         marginLeft: 20,

@@ -26,23 +26,29 @@ export default function LoginScreen({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text>Email:</Text>
-            <TextInput
+        <View style={styles.container2}>
+            <Text style={styles.textstyle} >Email:</Text>
+            <TextInput  style={styles.btnSpacer2}
                 keyboardType='email-address'
                 placeholder='Email'
                 onChangeText={text => setEmail(text)}
             />
-            <Text>Password:</Text>
-            <TextInput
+            <Text style={styles.textstyle}>Password:</Text>
+            <TextInput  style={styles.btnSpacer2}
                 placeholder='Password'
                 onChangeText={text => setPassword(text)}
                 secureTextEntry={true}
             />
+            <View style={styles.loginbtn}>
             <Button onPress={() => tryLogin()} title="Login"></Button>
-            <Text>Or register here</Text>
+            </View>
+            </View>
+            <View>
+            <Text style={styles.btnSpacer}>Or register here</Text>
             <Button onPress={() => navigation.navigate('Register')} title="register" />
-            <Text>You can log out here</Text>
-            <Button onPress={async () => await tryLogout()} title="logout" />
+            <Text style={styles.btnSpacer}>You can log out here</Text>
+            <Button  onPress={async () => await tryLogout()} title="logout" />
+            </View>
         </View>
     )
 }
@@ -53,5 +59,37 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+
     },
+    btnSpacer: {
+    margin: 10,
+    textAlign: 'center',
+    },
+     btnSpacer2: {
+        textAlign: 'center',
+        margin:15,
+
+        backgroundColor: '#eaeaea'
+        },
+
+     btnSpacer3: {
+        textAlign: 'center',
+        margin:15,
+        width: 300,
+        backgroundColor: '#eaeaea',
+
+        },
+     container2: {
+      textAlign: 'center',
+      width: 300,
+     marginBottom: 80
+     },
+     textstyle: {
+      textAlign: 'center',
+     },
+     loginbtn: {
+     width: 200,
+     alignSelf: 'center'
+     }
+
 });

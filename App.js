@@ -14,6 +14,7 @@ import Thread from './screens/Thread';
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';
 import React, { useRef } from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
 
@@ -60,11 +61,39 @@ const Drawer = createDrawerNavigator();
 function MyDrawer() {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Login" component={LoginScreen} />
-      <Drawer.Screen name="Register" component={RegisterScreen} />
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="ThreadMenu" component={ThreadMenu} />
-      <Drawer.Screen name="NewThread" component={NewThread} />
+       <Drawer.Screen name="Home" component={Home}
+       options={{
+          drawerIcon: config => <Icon
+            size={23}
+            name={'home-outline'}></Icon>
+          }}/>
+      <Drawer.Screen name="ThreadMenu" component={ThreadMenu}
+      options={{
+          drawerIcon: config => <Icon
+            size={23}
+            name={'file-tray-stacked-outline'}></Icon>
+          }}/>
+      <Drawer.Screen name="NewThread" component={NewThread}
+      options={{
+          drawerIcon: config => <Icon
+            size={23}
+            name={'file-tray-outline'}></Icon>
+          }}/>
+      <Drawer.Screen name="Login" component={LoginScreen}
+      options={{
+          drawerIcon: config => <Icon
+            size={23}
+            name={'log-in-outline'}></Icon>
+          }}/>
+      <Drawer.Screen name="Register" component={RegisterScreen}
+       options={{
+          drawerIcon: config => <Icon
+            size={23}
+            name={'clipboard-outline'}></Icon>
+          }}/>
+
+
+
     </Drawer.Navigator>
   );
 }

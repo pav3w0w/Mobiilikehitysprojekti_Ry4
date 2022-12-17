@@ -40,21 +40,21 @@ export default function RegisterScreen({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text>Email:</Text>
-            <TextInput
+            <Text style={styles.btnSpacer}>Email:</Text>
+            <TextInput style={styles.btnSpacer2}
                 keyboardType='email-address'
                 placeholder='Email'
                 onChangeText={text => setEmail(text)}
             />
             <Text>Password:</Text>
-            <TextInput
+            <TextInput style={styles.btnSpacer2}
                 placeholder='Password'
                 onChangeText={text => setPassword(text)}
                 secureTextEntry={true}
                 value={password}
             />
             <Text>Repeat Password:</Text>
-            <TextInput
+            <TextInput style={styles.btnSpacer2}
                 placeholder='Repeat password'
                 onChangeText={text => setRePassword(text)}
                 secureTextEntry={true}
@@ -72,4 +72,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    btnSpacer2: {
+            textAlign: 'center',
+            margin:15,
+            width: 250,
+            backgroundColor: '#eaeaea'
+            },
+             btnSpacer: {
+
+                textAlign: 'center',
+                },
 });
