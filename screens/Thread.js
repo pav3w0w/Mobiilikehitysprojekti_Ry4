@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { getLogin } from '../helpers/getLoginInfo'
-import { doc, getDoc, getFirestore, updateDoc, arrayUnion, addDoc, collection } from "firebase/firestore"
+import { doc, getDoc, getFirestore, updateDoc, arrayUnion, addDoc, collection, orderBy } from "firebase/firestore"
 import { db } from '../dbConn'
+import { upvote, downvote } from '../helpers/votes'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
 
@@ -12,37 +13,37 @@ export default function Thread({ route, navigation }) {
   const [commentlist, addComment] = useState([])
   const [title, setTitle] = useState("loading..")
   const [content, setContent] = useState("")
-  const [comments, setComments] = useState(["loading..."])
+  const [comments, setComments] = useState([])
   const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 })
   const [isMounted, setMounted] = useState(false)
 
   const submitNewComment = () => {
     if (comment != "") {
       commentToFirebase()
-    }else {
+    } else {
       console.log("empty string")
     }
   }
 
-  const commentToFirebase = async() => {
+  const commentToFirebase = async () => {
     const userData = await getLogin()
     const fireStore = getFirestore(db)
     const docRef = await addDoc(collection(fireStore, "comments"), {
-      comments : [],
-      content : comment,
-      downvotes : 0,
-      upvotes : 0,
-      ownerUser : userData.id
-    }).catch(error => console.log(error)) 
-      console.log("data updated")
-      comments.push(comment)
-      setComments([...comments])
-      setNewComment("")
-      updateCommentArray(route.params.threadId, docRef.id)
+      comments: [],
+      content: comment,
+      downvotes: 0,
+      upvotes: 0,
+      ownerUser: userData.id
+    }).catch(error => console.log(error))
+    console.log("data updated")
+    comments.push(comment)
+    setComments([...comments])
+    setNewComment("")
+    updateCommentArray(route.params.threadId, docRef.id)
   }
-  
-  
-  const updateCommentArray = async(threadId, commentId) => {
+
+
+  const updateCommentArray = async (threadId, commentId) => {
     const fireStore = getFirestore(db)
     await updateDoc(doc(fireStore, "langat", threadId), {
       comments: arrayUnion(commentId)
@@ -53,20 +54,6 @@ export default function Thread({ route, navigation }) {
     })
   }
 
-
-  const downvote = () => {
-    var newVotes = votes
-    newVotes.downvotes = newVotes.downvotes - 1
-    setVotes({ upvotes: newVotes.upvotes, downvotes: newVotes.downvotes })
-    updateVotes(route.params.threadId, newVotes)
-  }
-
-  const upvote = () => {
-    var newVotes = votes
-    newVotes.upvotes = newVotes.upvotes + 1
-    setVotes({ upvotes: newVotes.upvotes, downvotes: newVotes.downvotes })
-    updateVotes(route.params.threadId, newVotes)
-  }
 
   const getDetails = async (threadId) => {
     const fireStore = getFirestore(db)
@@ -85,11 +72,22 @@ export default function Thread({ route, navigation }) {
       const commentRef = doc(fireStore, "comments", details.data().comments[index]);
       const docSnap = await getDoc(commentRef);
       if (docSnap.exists()) {
-        commentlist.push(docSnap.data().content)
-        } else {
-          console.log("No such document!");
-        }
+        commentDetails = docSnap.data()
+        commentlist.push({
+          content: commentDetails.content,
+          id: docSnap.id,
+          votes: { upvotes: commentDetails.upvotes, downvotes: commentDetails.downvotes }
+        })
+      } else {
+        console.log("No such document!");
+      }
     }
+    commentlist.sort(function (com) {
+      if (com.votes.upvotes + com.votes.downvotes == 0)
+        return -1
+      return com.votes.upvotes + com.votes.downvotes
+    })
+    commentlist.reverse()
     setComments(commentlist)
   }
 
@@ -100,22 +98,14 @@ export default function Thread({ route, navigation }) {
     }
   })
 
-  const updateVotes = async (threadId, newVotes) => {
-    const fireStore = getFirestore(db)
-    await updateDoc(doc(fireStore, "langat", threadId), {
-      upvotes: newVotes.upvotes, 
-      downvotes: newVotes.downvotes
-    }).then(() => {
-      console.log("data updated")
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <VoteButtons votes={votes} upvote={() => { upvote() }} downvote={() => { downvote() }} />
+        <VoteButtons
+          votes={votes}
+          upvote={() => { upvote(votes, setVotes, route.params.threadId, "langat") }}
+          downvote={() => { downvote(votes, setVotes, route.params.threadId, "langat") }} />
         <Text style={styles.title}>{title}</Text>
       </View>
       <Text style={styles.OPtext}>{content}</Text>
@@ -130,7 +120,13 @@ export default function Thread({ route, navigation }) {
       </Pressable>
       <ScrollView>
         {comments.map(com => {
-          return <Comments comment={com} />
+          console.log(com)
+          return <Comments
+            key={com.id}
+            comment={com.content}
+            commentId={com.id}
+            votes={com.votes}
+          />
         })}
       </ScrollView>
     </View>

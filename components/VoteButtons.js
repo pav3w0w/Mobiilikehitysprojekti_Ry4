@@ -24,7 +24,7 @@ export default function VoteButtons(props) {
           />
         </Pressable>
       </View>
-    </View>
+    </View >
   )
 }
 

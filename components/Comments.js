@@ -1,13 +1,21 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
+import { upvote, downvote } from '../helpers/votes'
 import { AntDesign } from '@expo/vector-icons';
 import VoteButtons from '../components/VoteButtons';
 export default function Comments(props) {
+
+
+  const [votes, setVotes] = useState(props.votes)
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.comment}>{props.comment}</Text>
-        <VoteButtons votes={{ upvotes: 0, downvotes: 0 }} upvote={() => { console.log("upvote") }} downvote={() => { console.log("downvote") }} />
+        <VoteButtons
+          votes={props.votes}
+          upvote={() => { upvote(props.votes, setVotes, props.commentId, "comments") }}
+          downvote={() => { downvote(props.votes, setVotes, props.commentId, "comments") }}
+        />
       </View>
     </View>
   )
