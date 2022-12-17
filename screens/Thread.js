@@ -28,15 +28,22 @@ export default function Thread({ route, navigation }) {
   const commentToFirebase = async () => {
     const userData = await getLogin()
     const fireStore = getFirestore(db)
-    const docRef = await addDoc(collection(fireStore, "comments"), {
+    var newComment = {
       comments: [],
       content: comment,
       downvotes: 0,
       upvotes: 0,
       ownerUser: userData.id
-    }).catch(error => console.log(error))
+    }
+    const docRef = await addDoc(collection(fireStore, "comments"), newComment)
+      .catch(error => console.log(error))
     console.log("data updated")
-    comments.push(comment)
+    var commentWithoutUserData = {
+      id: docRef.id,
+      content: comment,
+      votes: { upvotes: 0, downvotes: 0 }
+    }
+    comments.push(commentWithoutUserData)
     setComments([...comments])
     setNewComment("")
     updateCommentArray(route.params.threadId, docRef.id)
