@@ -6,11 +6,11 @@ import { db } from '../dbConn'
 import { upvote, downvote } from '../helpers/votes'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
+import Toast from 'react-native-root-toast'
 
 
 export default function Thread({ route, navigation }) {
   const [comment, setNewComment] = useState("")
-  const [commentlist, addComment] = useState([])
   const [title, setTitle] = useState("loading..")
   const [content, setContent] = useState("")
   const [comments, setComments] = useState([])
@@ -36,18 +36,26 @@ export default function Thread({ route, navigation }) {
       upvotes: 0,
       ownerUser: userData.id
     }
-    const docRef = await addDoc(collection(fireStore, "comments"), newComment)
-      .catch(error => console.log(error))
-    console.log("data updated")
-    var commentWithoutUserData = {
-      id: docRef.id,
-      content: comment,
-      votes: { upvotes: 0, downvotes: 0 }
-    }
-    comments.push(commentWithoutUserData)
-    setComments([...comments])
-    setNewComment("")
-    updateCommentArray(route.params.threadId, docRef.id)
+    addDoc(collection(fireStore, "comments"), newComment).then((docRef => {
+      console.log("data updated")
+      var commentWithoutUserData = {
+        id: docRef.id,
+        content: comment,
+        votes: { upvotes: 0, downvotes: 0 }
+      }
+      comments.push(commentWithoutUserData)
+      setComments([...comments])
+      setNewComment("")
+      updateCommentArray(route.params.threadId, docRef.id)
+    })).catch((error) => {
+      if (error.name == "FirebaseError") {
+        Toast.show("You need to be signed in to post", {
+          duration: Toast.durations.LONG
+        })
+      } else {
+        throw error
+      }
+    })
   }
 
 
