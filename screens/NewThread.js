@@ -20,20 +20,21 @@ export default function NewThread({ route, navigation }) {
     } else {
       const userData = await getLogin()
       const fireStore = getFirestore(db)
-      const docRef = await addDoc(collection(fireStore, 'langat'), {
+      addDoc(collection(fireStore, 'langat'), {
         title: title,
         content: threadText,
         downvotes: 0,
         upvotes: 0,
         comments: [],
         ownerUser: userData.id
-      }).then(() => {
+      }).then((docRef) => {
         setTitle('')
         setThreadText('')
         console.log('Post saved.')
         Toast.show('Successfully posted.', {
           duration: Toast.durations.LONG,
         })
+        navigation.navigate('Thread', { screen: 'Thread', threadId: docRef.id })
       }).catch((error) => {
         console.log(error)
         if (error.name == "FirebaseError") {
