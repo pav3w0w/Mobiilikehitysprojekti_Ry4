@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet } from 'react-native'
+import { View, ScrollView, StyleSheet, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import ThreadPreview from '../components/ThreadPreview'
 import { collection, getDocs, getFirestore } from "firebase/firestore"
@@ -7,6 +7,7 @@ import { db } from '../dbConn'
 export default function ThreadMenu({ route, navigation }) {
     const [threads, setThreads] = useState([])
     const [isMounted, setMounted] = useState(false)
+    const [refreshing, setRefreshing] = useState(true)
 
     const getThreads = async () => {
         const fireStore = getFirestore(db)
@@ -17,6 +18,7 @@ export default function ThreadMenu({ route, navigation }) {
             docArr.push(document)
         })
         setThreads(docArr)
+        setRefreshing(false)
     }
 
     useEffect(() => {
@@ -27,7 +29,7 @@ export default function ThreadMenu({ route, navigation }) {
     })
 
     return (
-        < ScrollView style={styles.titleContainer}>
+        < ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={getThreads} />} style={styles.titleContainer}>
             <View>
                 {threads.map(doc => {
                     paramObj = doc.data()
@@ -41,5 +43,5 @@ export default function ThreadMenu({ route, navigation }) {
 const styles = StyleSheet.create({
     titleContainer: {
         backgroundColor: '#fff'
-        }
-    });
+    }
+});
