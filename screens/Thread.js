@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    paddingLeft: 20,
+    paddingLeft: 30,
     marginRight: 50,
   },
   OPtext: {
