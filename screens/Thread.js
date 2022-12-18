@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { getLogin } from '../helpers/getLoginInfo'
 import { doc, getDoc, getFirestore, updateDoc, arrayUnion, addDoc, collection, orderBy } from "firebase/firestore"
@@ -16,6 +16,7 @@ export default function Thread({ route, navigation }) {
   const [comments, setComments] = useState([])
   const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 })
   const [isMounted, setMounted] = useState(false)
+  const [refreshing, setRefreshing] = useState(true)
 
   const submitNewComment = () => {
     if (comment != "") {
@@ -79,7 +80,7 @@ export default function Thread({ route, navigation }) {
       const commentRef = doc(fireStore, "comments", details.data().comments[index]);
       const docSnap = await getDoc(commentRef);
       if (docSnap.exists()) {
-        commentDetails = docSnap.data()
+        var commentDetails = docSnap.data()
         commentlist.push({
           content: commentDetails.content,
           id: docSnap.id,
@@ -96,6 +97,7 @@ export default function Thread({ route, navigation }) {
     })
     commentlist.reverse()
     setComments(commentlist)
+    setRefreshing(false)
   }
 
   useEffect(() => {
@@ -125,7 +127,7 @@ export default function Thread({ route, navigation }) {
       <Pressable style={styles.submitButton} onPress={submitNewComment}>
         <Text style={styles.submitText}>Submit</Text>
       </Pressable>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => getDetails(route.params.threadId)} />}>
         {comments.map(com => {
           console.log(com)
           return <Comments
