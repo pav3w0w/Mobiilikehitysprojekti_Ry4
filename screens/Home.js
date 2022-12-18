@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { View, Text, Button, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import { getLogin } from '../helpers/getLoginInfo'
 
@@ -9,6 +9,9 @@ export default function Home({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+
+    <Image style={styles.logo} source={require('../assets/Rambler.png') } />
+
     <View>
       <Text style={styles.btnSpacer}>Browse threads created by users here</Text>
       <Button title='Browse Threads '/*<- space needed to render the button correctly on 1Plus- phones */
@@ -35,5 +38,11 @@ const styles = StyleSheet.create({
   btnSpacer: {
     margin: 15,
     textAlign: 'center',
+  },
+  logo:{
+    resizeMode: "contain",
+    height: 100,
+    width: 200,
+    marginBottom: 100
   }
 });
