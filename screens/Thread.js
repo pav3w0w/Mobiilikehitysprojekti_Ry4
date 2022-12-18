@@ -79,9 +79,10 @@ export default function Thread({ route, navigation }) {
     for (let index = 0; index < details.data().comments.length; index++) {
       const commentRef = doc(fireStore, "comments", details.data().comments[index]);
       const docSnap = await getDoc(commentRef);
+      var newCommentList = []
       if (docSnap.exists()) {
         var commentDetails = docSnap.data()
-        commentlist.push({
+        newCommentList.push({
           content: commentDetails.content,
           id: docSnap.id,
           votes: { upvotes: commentDetails.upvotes, downvotes: commentDetails.downvotes }
@@ -90,13 +91,13 @@ export default function Thread({ route, navigation }) {
         console.log("No such document!");
       }
     }
-    commentlist.sort(function (com) {
+    newCommentList.sort(function (com) {
       if (com.votes.upvotes + com.votes.downvotes == 0)
         return -1
       return com.votes.upvotes + com.votes.downvotes
     })
-    commentlist.reverse()
-    setComments(commentlist)
+    newCommentList.reverse()
+    setComments(newCommentList)
     setRefreshing(false)
   }
 
