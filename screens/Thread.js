@@ -84,10 +84,10 @@ export default function Thread({ route, navigation }) {
     else {
       console.log("Error fetching thread with id: " + threadId)
     }
+    var newCommentList = []
     for (let index = 0; index < details.data().comments.length; index++) {
       const commentRef = doc(fireStore, "comments", details.data().comments[index]);
       const docSnap = await getDoc(commentRef);
-      var newCommentList = []
       if (docSnap.exists()) {
         var commentDetails = docSnap.data()
         newCommentList.push({
