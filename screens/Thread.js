@@ -6,11 +6,11 @@ import { db } from '../dbConn'
 import { upvote, downvote } from '../helpers/votes'
 import Comments from '../components/Comments';
 import VoteButtons from '../components/VoteButtons';
+import Toast from 'react-native-root-toast'
 
 
 export default function Thread({ route, navigation }) {
   const [comment, setNewComment] = useState("")
-  const [commentlist, addComment] = useState([])
   const [title, setTitle] = useState("loading..")
   const [content, setContent] = useState("")
   const [comments, setComments] = useState([])
@@ -36,18 +36,26 @@ export default function Thread({ route, navigation }) {
       upvotes: 0,
       ownerUser: userData.id
     }
-    const docRef = await addDoc(collection(fireStore, "comments"), newComment)
-      .catch(error => console.log(error))
-    console.log("data updated")
-    var commentWithoutUserData = {
-      id: docRef.id,
-      content: comment,
-      votes: { upvotes: 0, downvotes: 0 }
-    }
-    comments.push(commentWithoutUserData)
-    setComments([...comments])
-    setNewComment("")
-    updateCommentArray(route.params.threadId, docRef.id)
+    addDoc(collection(fireStore, "comments"), newComment).then((docRef => {
+      console.log("data updated")
+      var commentWithoutUserData = {
+        id: docRef.id,
+        content: comment,
+        votes: { upvotes: 0, downvotes: 0 }
+      }
+      comments.push(commentWithoutUserData)
+      setComments([...comments])
+      setNewComment("")
+      updateCommentArray(route.params.threadId, docRef.id)
+    })).catch((error) => {
+      if (error.name == "FirebaseError") {
+        Toast.show("You need to be signed in to post", {
+          duration: Toast.durations.LONG
+        })
+      } else {
+        throw error
+      }
+    })
   }
 
 
@@ -79,9 +87,10 @@ export default function Thread({ route, navigation }) {
     for (let index = 0; index < details.data().comments.length; index++) {
       const commentRef = doc(fireStore, "comments", details.data().comments[index]);
       const docSnap = await getDoc(commentRef);
+      var newCommentList = []
       if (docSnap.exists()) {
         var commentDetails = docSnap.data()
-        commentlist.push({
+        newCommentList.push({
           content: commentDetails.content,
           id: docSnap.id,
           votes: { upvotes: commentDetails.upvotes, downvotes: commentDetails.downvotes }
@@ -90,13 +99,13 @@ export default function Thread({ route, navigation }) {
         console.log("No such document!");
       }
     }
-    commentlist.sort(function (com) {
+    newCommentList.sort(function (com) {
       if (com.votes.upvotes + com.votes.downvotes == 0)
         return -1
       return com.votes.upvotes + com.votes.downvotes
     })
-    commentlist.reverse()
-    setComments(commentlist)
+    newCommentList.reverse()
+    setComments(newCommentList)
     setRefreshing(false)
   }
 
