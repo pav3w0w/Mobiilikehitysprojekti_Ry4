@@ -27,12 +27,22 @@ export default function NewThread({ route, navigation }) {
         upvotes: 0,
         comments: [],
         ownerUser: userData.id
-      }).catch(error => console.log(error))
-      setTitle('')
-      setThreadText('')
-      console.log('Post saved.')
-      Toast.show('Successfully posted.', {
-        duration: Toast.durations.LONG,
+      }).then(() => {
+        setTitle('')
+        setThreadText('')
+        console.log('Post saved.')
+        Toast.show('Successfully posted.', {
+          duration: Toast.durations.LONG,
+        })
+      }).catch((error) => {
+        console.log(error)
+        if (error.name == "FirebaseError") {
+          Toast.show("You need to be signed in to post", {
+            duration: Toast.durations.LONG
+          })
+        } else {
+          throw error
+        }
       })
     }
   }
